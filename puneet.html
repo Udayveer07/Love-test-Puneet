@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Yes/No Love Game for Puneet 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fad0c4 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+            gap: 25px;
+            color: #333;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="heartGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23ff69b4" stop-opacity="0.3"/><stop offset="100%" stop-color="%23ff1493" stop-opacity="0"/></radialGradient></defs><circle cx="20" cy="20" r="5" fill="url(%23heartGrad)"><animate attributeName="cy" values="20;15;20" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="80" r="4" fill="url(%23heartGrad)"><animate attributeName="cy" values="80;75;80" dur="3s" repeatCount="indefinite"/></circle><circle cx="50" cy="30" r="3" fill="url(%23heartGrad)"><animate attributeName="cx" values="50;55;50" dur="2.5s" repeatCount="indefinite"/></circle></svg>') repeat;
+            animation: sparkle 20s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        .stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            color: #333;
+            z-index: 15;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.8em;
+            margin: 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .sad-emoji {
+            font-size: 4em;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: scale(1) rotate(0deg);
+            z-index: 10;
+        }
+
+        .sad-emoji.sad1 { transform: scale(1.1) rotate(-2deg); }
+        .sad-emoji.sad2 { transform: scale(1.2) rotate(-5deg); }
+        .sad-emoji.sad3 { transform: scale(1.3) rotate(-8deg); }
+        .sad-emoji.sad4 { transform: scale(1.4) rotate(-12deg); }
+        .sad-emoji.sad5 { 
+            transform: scale(1.6) rotate(-20deg); 
+            animation: shake 0.8s infinite, cry 0.5s infinite; 
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(-20deg) scale(1.6); }
+            25% { transform: translateX(-12px) rotate(-25deg) scale(1.6); }
+            75% { transform: translateX(12px) rotate(-15deg) scale(1.6); }
+        }
+
+        @keyframes cry {
+            0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+            50% { filter: hue-rotate(20deg) brightness(0.8); }
+        }
+
+        .question {
+            background: rgba(255,255,255,0.97);
+            padding: 35px 50px;
+            border-radius: 30px;
+            font-size: 1.8em;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 650px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Question sadness animations */
+        .question.sad1 { 
+            background: rgba(255,255,200,0.95); 
+            transform: scale(0.98) translateY(5px);
+            box-shadow: 0 10px 30px rgba(255,200,0,0.4);
+        }
+        .question.sad2 { 
+            background: rgba(255,240,200,0.95); 
+            transform: scale(0.96) translateY(10px);
+            box-shadow: 0 8px 25px rgba(255,150,0,0.5);
+            border: 3px solid #ff9800;
+        }
+        .question.sad3 { 
+            background: rgba(255,220,200,0.95); 
+            transform: scale(0.94) translateY(15px) rotate(-1deg);
+            box-shadow: 0 6px 20px rgba(255,100,0,0.6);
+            border: 4px solid #ff5722;
+        }
+        .question.sad4 { 
+            background: rgba(255,200,200,0.95); 
+            transform: scale(0.92) translateY(20px) rotate(-2deg);
+            box-shadow: 0 4px 15px rgba(255,50,50,0.7);
+            border: 5px solid #f44336;
+        }
+        .question.sad5 { 
+            background: rgba(255,180,180,0.95); 
+            transform: scale(0.90) translateY(25px) rotate(-3deg);
+            box-shadow: 0 2px 10px rgba(200,0,0,0.8);
+            border: 6px solid #d32f2f;
+            animation: questionShake 1s infinite;
+        }
+
+        @keyframes questionShake {
+            0%, 100% { transform: scale(0.90) translateY(25px) rotate(-3deg) translateX(0); }
+            25% { transform: scale(0.90) translateY(25px) rotate(-3deg) translateX(-8px); }
+            75% { transform: scale(0.90) translateY(25px) rotate(-3deg) translateX(8px); }
+        }
+
+        .question:hover:not(.sad5) {
+            transform: scale(1.03);
+            box-shadow: 0 20px 55px rgba(0,0,0,0.4);
+        }
+
+        /* Dynamic button container */
+        .buttons {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .button-wrapper {
+            position: absolute;
+            display: flex;
+            gap: 40px;
+            pointer-events: auto;
+            transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .yes-btn, .no-btn {
+            padding: 22px 45px;
+            font-size: 1.6em;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            min-width: 140px;
+            letter-spacing: 1px;
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d, #26a69a);
+            color: white;
+        }
+
+        .no-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24, #f44336);
+            color: white;
+        }
+
+        .yes-btn:hover:not(.locked), .no-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 18px 50px rgba(0,0,0,0.4);
+        }
+
+        .yes-btn.locked {
+            background: linear-gradient(45deg, #4ecdc4, #26a69a);
+            cursor: default;
+        }
+
+        .yes-btn.dodging {
+            animation: dodge 0.7s ease-out;
+        }
+
+        @keyframes dodge {
+            0% { transform: translateY(0) scale(1); }
+            20% { transform: translateX(-50px) translateY(-25px) scale(1.08); }
+            40% { transform: translateX(60px) translateY(-35px) scale(1.15); }
+            60% { transform: translateX(-30px) translateY(-15px) scale(1.1); }
+            80% { transform: translateX(20px) translateY(-5px) scale(1.05); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .elusive-heart {
+            position: absolute;
+            font-size: 3.5em;
+            pointer-events: none;
+            z-index: 5;
+            animation: float 3s ease-out forwards;
+        }
+
+        @keyframes float {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-120px) scale(1.8) rotate(360deg); }
+        }
+
+        /* Button positions - 8 corners/sides */
+        .pos-0 { top: 20%; left: 10%; }
+        .pos-1 { top: 10%; right: 10%; }
+        .pos-2 { bottom: 20%; right: 10%; }
+        .pos-3 { bottom: 10%; left: 10%; }
+        .pos-4 { top: 50%; left: 5%; }
+        .pos-5 { top: 5%; left: 50%; }
+        .pos-6 { bottom: 5%; left: 50%; }
+        .pos-7 { top: 50%; right: 5%; }
+    </style>
+</head>
+<body>
+    <div class="stats">
+        YES: <span id="yesCount">0</span> | NO: <span id="noCount">0</span>
+    </div>
+
+    <div class="header">
+        <div id="sadEmoji" class="sad-emoji">🥰</div>
+        <h1>Puneet's Love Test 💕</h1>
+    </div>
+    
+    <div id="question" class="question">Do you miss me right now, Puneet? 😘</div>
+    
+    <div class="buttons">
+        <div id="buttonWrapper" class="button-wrapper pos-0">
+            <button id="yesBtn" class="yes-btn">YES 😍</button>
+            <button id="noBtn" class="no-btn">NO 🙄</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Do you miss my hugs right now, Puneet? 🤗",
+            "Would you kiss me if I was there? 💋",
+            "Am I your favorite person ever? 😍",
+            "Does thinking of me make you smile? 😊",
+            "Do you dream about our reunion? ✨",
+            "Is our love stronger than distance? 💪❤️",
+            "Would you dance with me under Chandigarh stars? ⭐",
+            "Am I your forever jaan? 🌹",
+            "Do you crave my voice tonight? 🎤",
+            "Would a virtual date make your day? 📱💕",
+            "Is Chandigarh boring without me? 🏙️😜",
+            "Do you feel my love every day? 🥰",
+            "Would you run to me at airport? ✈️",
+            "Am I worth the long-distance wait? ⏳❤️",
+            "Yes or no: Marry me someday? 💍"
+        ];
+
+        const sadEmojis = ['🥰', '🙃', '😐', '😒', '😢', '😭'];
+        const buttonPositions = ['pos-0', 'pos-1', 'pos-2', 'pos-3', 'pos-4', 'pos-5', 'pos-6', 'pos-7'];
+
+        let currentQuestionIndex = 0;
+        let dodgeCount = 0;
+        let noCount = 0;
+        let yesCount = 0;
+        const maxDodges = 3;
+        const maxNo = 5;
+        let currentPositionIndex = 0;
+
+        const questionEl = document.getElementById('question');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const sadEmoji = document.getElementById('sadEmoji');
+        const yesCounter = document.getElementById('yesCount');
+        const noCounter = document.getElementById('noCount');
+        const buttonWrapper = document.getElementById('buttonWrapper');
+
+        // Update counters
+        function updateCounters() {
+            yesCounter.textContent = yesCount;
+            noCounter.textContent = noCount;
+        }
+
+        // Move buttons to new position
+        function moveButtonsToNewPosition() {
+            currentPositionIndex = (currentPositionIndex + 1) % buttonPositions.length;
+            buttonWrapper.className = `button-wrapper ${buttonPositions[currentPositionIndex]}`;
+        }
+
+        // Yes button: Dodge 3 times max
+        yesBtn.addEventListener('mouseenter', () => {
+            if (dodgeCount < maxDodges && !yesBtn.classList.contains('locked')) {
+                yesBtn.classList.add('dodging');
+                dodgeCount++;
+                setTimeout(() => {
+                    yesBtn.classList.remove('dodging');
+                }, 700);
+            }
+        });
+
+        // YES Click - Victory celebration!
+        yesBtn.addEventListener('click', () => {
+            yesCount++;
+            updateCounters();
+            
+            // Reset everything to happy state
+            sadEmoji.textContent = '🥰';
+            sadEmoji.className = 'sad-emoji';
+            questionEl.className = 'question';
+            dodgeCount = 0;
+            noCount = 0;
+            yesBtn.classList.remove('locked');
+            
+            // Epic heart explosion
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'elusive-heart';
+                    heart.innerHTML = ['❤️', '💖', '💕', '💝', '😍', '✨', '🌟', '💫'][Math.floor(Math.random() * 8)];
+                    heart.style.left = (Math.random() * 80 + 10) + '%';
+                    heart.style.top = '60%';
+                    heart.style.fontSize = (Math.random() * 1 + 2.5) + 'em';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 3500);
+                }, i * 120);
+            }
+
+            // Next question + move buttons
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            questionEl.innerHTML = `${questions[currentQuestionIndex]}<br><span style="font-size: 0.7em; color: #4ecdc4;">Yay! I love you Puneet! 💕</span>`;
+            moveButtonsToNewPosition();
+            
+            setTimeout(() => {
+                questionEl.textContent = questions[currentQuestionIndex];
+            }, 2000);
+        });
+
+        // NO Click - Progressive heartbreak + animations
+        noBtn.addEventListener('click', () => {
+            noCount++;
+            updateCounters();
+            
+            if (noCount <= maxNo) {
+                // Update sad emoji and question animations
+                sadEmoji.textContent = sadEmojis[noCount];
+                sadEmoji.className = `sad-emoji sad${noCount}`;
+                questionEl.className = `question sad${noCount}`;
+                
+                questionEl.innerHTML = `Aww Puneet, really? ${sadEmojis[noCount]}<br>You're breaking my heart... Try again! 💔`;
+            } else {
+                // Maximum sadness
+                sadEmoji.innerHTML = '😭💔';
+                sadEmoji.className = 'sad-emoji sad5';
+                questionEl.className = 'question sad5';
+                questionEl.innerHTML = `Puneet NOOO! 😭💔<br>My heart is shattered... <strong>Please say YES!</strong> 🥺`;
+            }
+            
+            // Move buttons to new position on NO
+            moveButtonsToNewPosition();
+            
+            setTimeout(() => {
+                currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+                questionEl.textContent = questions[currentQuestionIndex];
+                questionEl.className = 'question';
+            }, 2500);
+        });
+
+        // Lock YES button after 3 dodges
+        yesBtn.addEventListener('mouseleave', () => {
+            if (dodgeCount >= maxDodges) {
+                yesBtn.classList.add('locked');
+            }
+        });
+
+        // Initial setup
+        updateCounters();
+        questionEl.textContent = questions[0];
+    </script>
+</body>
+</html>
